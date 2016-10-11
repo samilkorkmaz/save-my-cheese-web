@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Save my cheese</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="drawer.js"></script>
+        <style>
+            table, td, th {
+                border: 1px solid black;
+            }
+            table {
+                border-collapse: collapse;
+            }
+            td {
+                vertical-align: top;
+            }
+        </style>
+    </head>
+    <body>
+        <table style="width:100%">
+            <tr>
+                <td>
+                    <table>
+                        <td><button onclick="myInterval = setInterval(timeTick, 1500)">Start interval</button></td>
+                        <td><button onclick="reset()">Reset</button></td>
+                        <td><p id="coords">---</p></td>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td valign="top"><canvas id="board" width="800" height="600" onmousedown="onMouseDown(event)"
+                    onmouseup="onMouseUp(event)" onmousemove="onMouseMove(event)" style="border:1px solid"></canvas></td> 
+            </tr>
+        </table>
+        <!--script> var myInterval = setInterval(initCanvas, 500);</script--> 
+        <!--script> initCanvas();</script-->
+    </body>
+</html>
