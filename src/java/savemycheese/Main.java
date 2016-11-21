@@ -21,12 +21,15 @@ import model.MyPolygon;
  */
 public class Main extends HttpServlet {
 
+    private static final String UNDEFINED_STR = "\"UNDEFINED\"";
     private final int TRIGGER_INIT = 0;
     private final int TRIGGER_MOUSE_MOVE = 10;
     private final int TRIGGER_TIME_TICK = 20;
 
     private static final List<MyPolygon> polygonList = new ArrayList<>();
     private static final List<MyPolygon> snapPolygonList = new ArrayList<>();
+    String polygonStr = UNDEFINED_STR;
+    String miceJsonStr = UNDEFINED_STR;
 
     private boolean isSelected = false;
     int iSelected = -1;
@@ -34,7 +37,6 @@ public class Main extends HttpServlet {
     private int snapY = 100;
     private static int prevMouseX;
     private static int prevMouseY;
-    private static final String UNDEFINED_STR = "\"UNDEFINED\"";
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -55,16 +57,15 @@ public class Main extends HttpServlet {
         int trigger = jsonFromJavaScript.getInt("trigger"); //TODO use enum
         System.out.println("trigger: " + trigger);
         String miceJsonStartStr = "\"mice\":";
-        String miceJsonStr = UNDEFINED_STR;
-        String polygonStr = UNDEFINED_STR;
         String jsonToJavaScriptStr;
         switch (trigger) {
             case TRIGGER_INIT:
                 init();
+                polygonStr = "\"updatePolygons\":false";
                 miceJsonStr = updateMice();
                 break;
             case TRIGGER_MOUSE_MOVE:
-                System.out.println("MOUSE_MOVE!");
+                System.out.println("JAVA: mouse move");
                 miceJsonStr = getMiceState();
                 //polygon stuff:
                 boolean mouseDown = jsonFromJavaScript.getBoolean("mouseDown");
@@ -73,6 +74,7 @@ public class Main extends HttpServlet {
                 polygonStr = updatePolygons(mouseDown, mouseX, mouseY);
                 break;
             case TRIGGER_TIME_TICK:
+                System.out.println("JAVA: time tick");
                 miceJsonStr = updateMice();
                 break;
             default:
@@ -82,7 +84,7 @@ public class Main extends HttpServlet {
 
         jsonToJavaScriptStr = "{" + polygonStr + ", " + miceJsonStartStr + miceJsonStr + "}";
         //Send data to JavaScript
-        System.out.println("jsonToJavaScript: " + jsonToJavaScriptStr);
+        //System.out.println("jsonToJavaScript: " + jsonToJavaScriptStr);
         try {
             response.setContentType("text/plain");
             response.getWriter().println(jsonToJavaScriptStr);
