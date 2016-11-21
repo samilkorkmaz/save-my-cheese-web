@@ -7,13 +7,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 import controller.GameController;
-import java.util.ArrayList;
 import java.util.List;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.json.spi.JsonProvider;
 import model.Map2D;
-import model.MyPolygon;
 
 /**
  *
@@ -26,17 +24,8 @@ public class Main extends HttpServlet {
     private final int TRIGGER_MOUSE_MOVE = 10;
     private final int TRIGGER_TIME_TICK = 20;
 
-    private static final List<MyPolygon> polygonList = new ArrayList<>();
-    private static final List<MyPolygon> snapPolygonList = new ArrayList<>();
     String polygonStr = UNDEFINED_STR;
     String miceJsonStr = UNDEFINED_STR;
-
-    private boolean isSelected = false;
-    int iSelected = -1;
-    private int snapX = 400;
-    private int snapY = 100;
-    private static int prevMouseX;
-    private static int prevMouseY;
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -62,8 +51,8 @@ public class Main extends HttpServlet {
             case TRIGGER_INIT:
                 init();
                 Gson gson = new Gson();
-                String dragPolygonJsonStr = gson.toJson(polygonList);
-                String snapPolygonJsonStr = gson.toJson(snapPolygonList);
+                String dragPolygonJsonStr = gson.toJson(GameController.getShapeList());
+                String snapPolygonJsonStr = gson.toJson(GameController.getSnapShapeList());
                 String dragPolygonStartJsonStr = "\"dragPolys\":";
                 String snapPolygonStartJsonStr = "\"snapPolys\":";
                 String polygonStartJsonStr = "\"updatePolygons\":true";
@@ -101,38 +90,20 @@ public class Main extends HttpServlet {
     }
 
     private String updatePolygons(boolean mouseDown, int mouseX, int mouseY) {
-        //String polygonStartJsonStr = "\"updatePolygons\":false";
         String dragPolygonStartJsonStr = "\"dragPolys\":";
         String snapPolygonStartJsonStr = "\"snapPolys\":";
-        //String dragPolygonJsonStr = UNDEFINED_STR;
-        //String snapPolygonJsonStr = UNDEFINED_STR;
         String polygonStartJsonStr = "\"updatePolygons\":true";
         System.out.println("mouseDown: " + mouseDown + ", x: " + mouseX + ", y: " + mouseY);
-        if (!mouseDown) {
-            isSelected = false;
+        if (mouseDown) {
+            GameController.setSelectedShape(mouseX, mouseY);
+            GameController.moveShape(mouseX, mouseY);
+        } else {
+            GameController.deselectShape();
         }
-        if (!isSelected) {
-            for (int iPoly = 0; iPoly < polygonList.size(); iPoly++) {
-                if (polygonList.get(iPoly).contains(mouseX, mouseY)) {
-                    isSelected = true;
-                    iSelected = iPoly;
-                    prevMouseX = mouseX;
-                    prevMouseY = mouseY;
-                    System.out.println("polygon contains xc yc! iSelected = " + iSelected);
-                    break;
-                }
-            }
-        }
-        if (isSelected && mouseDown) {
-            System.out.println("translate triangle");
-            polygonList.get(iSelected).translate(mouseX - prevMouseX, mouseY - prevMouseY);
-            prevMouseX = mouseX;
-            prevMouseY = mouseY;
-            polygonList.get(iSelected).isCloseTo(snapPolygonList.get(iSelected));
-        }
+
         Gson gson = new Gson();
-        String dragPolygonJsonStr = gson.toJson(polygonList);
-        String snapPolygonJsonStr = gson.toJson(snapPolygonList);
+        String dragPolygonJsonStr = gson.toJson(GameController.getShapeList());
+        String snapPolygonJsonStr = gson.toJson(GameController.getSnapShapeList());
         return polygonStartJsonStr + ", " + dragPolygonStartJsonStr + dragPolygonJsonStr
                 + ", " + snapPolygonStartJsonStr + snapPolygonJsonStr;
     }
@@ -162,40 +133,6 @@ public class Main extends HttpServlet {
         Map2D.createMap(800, 600);
         GameController.reset();
         GameController.start();
-
-        isSelected = false;
-        iSelected = -1;
-        int[] xPoints1 = {0, 100, 0};
-        int[] yPoints1 = {0, 0, 100};
-
-        int[] xPoints2 = {0, 100, 100, 0};
-        int[] yPoints2 = {0, 0, 100, 100};
-
-        int[] xPoints3 = {200, 300, 300, 50};
-        int[] yPoints3 = {0, 0, 100, 100};
-
-        MyPolygon poly1 = new MyPolygon(xPoints1, yPoints1);
-        MyPolygon poly2 = new MyPolygon(xPoints2, yPoints2);
-        MyPolygon poly3 = new MyPolygon(xPoints3, yPoints3);
-        MyPolygon snapPoly1 = new MyPolygon(xPoints1, yPoints1);
-        MyPolygon snapPoly2 = new MyPolygon(xPoints2, yPoints2);
-        MyPolygon snapPoly3 = new MyPolygon(xPoints3, yPoints3);
-        prevMouseX = 0;
-        prevMouseY = 0;
-
-        snapPoly1.translate(snapX, snapY);
-        snapPoly2.translate(snapX + 100, snapY);
-        snapPoly3.translate(snapX - 300, snapY);
-
-        polygonList.clear();
-        polygonList.add(poly1);
-        polygonList.add(poly2);
-        polygonList.add(poly3);
-
-        snapPolygonList.clear();
-        snapPolygonList.add(snapPoly1);
-        snapPolygonList.add(snapPoly2);
-        snapPolygonList.add(snapPoly3);
     }
 
 }

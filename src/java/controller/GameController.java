@@ -57,7 +57,7 @@ public class GameController {
         GameController.getMyMouseList().stream().forEach((myMouse) -> {
             myMouse.calcPathToCheese();
         });
-        CanvasPanel.refreshDrawing();
+        //CanvasPanel.refreshDrawing();
     }
 
     public static void onMouseReachedCheese() {
@@ -303,7 +303,7 @@ public class GameController {
             myMouseList.stream().forEach((myMouse) -> {
                 myMouse.setKeepRunning(false); //to end game loop thread in start().
             });
-            GameView.setLevelSuccess();
+            //GameView.setLevelSuccess();
         }
     }
 
