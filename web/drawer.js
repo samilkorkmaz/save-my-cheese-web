@@ -43,28 +43,27 @@ function updateBoard(jsonStrFromJava) {
             for (var iPoly = 0; iPoly < data.snapPolys.length; iPoly++) {
                 drawPolygon(context, data.snapPolys[iPoly].xpoints, data.snapPolys[iPoly].ypoints, NO_FILL);
             }
-        } else {
-            //alert("x: " + data.activePoint.x + ", y:" + data.activePoint.y);
-            displayResult(data.mice[0].activePoint.x, data.mice[0].activePoint.y);
-            var radius = 5;
-            context.beginPath();
-            context.arc(data.mice[0].activePoint.x, data.mice[0].activePoint.y, radius, 0, 2 * Math.PI, false);
-            //context.arc(300, 100, radius, 0, 2 * Math.PI, false);
-            context.fillStyle = 'green';
-            context.fill();
-            context.lineWidth = 3;
-            context.strokeStyle = '#003300';
-            context.stroke();
-            for (var iMouse = 0; iMouse < data.mice.length; iMouse++) {
-                var mouseImg = new Image();
-                mouseImg.src = "Mouse.png";
-                //mouseImg.src = "/WEB-INF/classes/resources/images/Level1.png";
-                mouseImg.x = data.mice[iMouse].activePoint.x;
-                mouseImg.y = data.mice[iMouse].activePoint.y;
-                mouseImg.onload = function () {
-                    context.drawImage(this, this.x, this.y);
-                };
-            }
+        }
+        //alert("x: " + data.activePoint.x + ", y:" + data.activePoint.y);
+        displayResult(data.mice[0].activePoint.x, data.mice[0].activePoint.y);
+        var radius = 5;
+        context.beginPath();
+        context.arc(data.mice[0].activePoint.x, data.mice[0].activePoint.y, radius, 0, 2 * Math.PI, false);
+        //context.arc(300, 100, radius, 0, 2 * Math.PI, false);
+        context.fillStyle = 'green';
+        context.fill();
+        context.lineWidth = 3;
+        context.strokeStyle = '#003300';
+        context.stroke();
+        for (var iMouse = 0; iMouse < data.mice.length; iMouse++) {
+            var mouseImg = new Image();
+            mouseImg.src = "Mouse.png";
+            //mouseImg.src = "/WEB-INF/classes/resources/images/Level1.png";
+            mouseImg.x = data.mice[iMouse].activePoint.x;
+            mouseImg.y = data.mice[iMouse].activePoint.y;
+            mouseImg.onload = function () {
+                context.drawImage(this, this.x, this.y);
+            };
         }
     }
 }
