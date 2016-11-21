@@ -266,22 +266,24 @@ public class GameController {
 
     public static void setSelectedShape(int mouseX, int mouseY) {
         if (GameController.getShapeList().size() > 0) {
-            for (int i = GameController.getShapeList().size() - 1; i >= 0; i--) {
-                if (GameController.getShapeList().get(i).contains(new Point(mouseX, mouseY))) { //if there is a polygon at clicked point
-                    selectedPolygon = GameController.getShapeList().get(i);
+            if (selectedPolygon == null) {
+                for (int i = GameController.getShapeList().size() - 1; i >= 0; i--) {
+                    if (GameController.getShapeList().get(i).contains(new Point(mouseX, mouseY))) { //if there is a polygon at clicked point
+                        selectedPolygon = GameController.getShapeList().get(i);
 
-                    //move the selected polygon to the end of list so that it will be drawn last (i.e. on top) in paintComponent and checked first for mouse click:
-                    GameController.getShapeList().remove(selectedPolygon);
-                    GameController.getShapeList().add(GameController.getShapeList().size(), selectedPolygon);
+                        //move the selected polygon to the end of list so that it will be drawn last (i.e. on top) in paintComponent and checked first for mouse click:
+                        GameController.getShapeList().remove(selectedPolygon);
+                        GameController.getShapeList().add(GameController.getShapeList().size(), selectedPolygon);
 
-                    selectedSnapPolygon = GameController.getSnapShapeList().get(i);
-                    GameController.getSnapShapeList().remove(selectedSnapPolygon);
-                    GameController.getSnapShapeList().add(GameController.getSnapShapeList().size(), selectedSnapPolygon);
+                        selectedSnapPolygon = GameController.getSnapShapeList().get(i);
+                        GameController.getSnapShapeList().remove(selectedSnapPolygon);
+                        GameController.getSnapShapeList().add(GameController.getSnapShapeList().size(), selectedSnapPolygon);
 
-                    prevMouseX = mouseX;
-                    prevMouseY = mouseY;
+                        prevMouseX = mouseX;
+                        prevMouseY = mouseY;
 
-                    break;
+                        break;
+                    }
                 }
             }
         }
