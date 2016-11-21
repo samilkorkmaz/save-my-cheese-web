@@ -61,7 +61,14 @@ public class Main extends HttpServlet {
         switch (trigger) {
             case TRIGGER_INIT:
                 init();
-                polygonStr = "\"updatePolygons\":false";
+                Gson gson = new Gson();
+                String dragPolygonJsonStr = gson.toJson(polygonList);
+                String snapPolygonJsonStr = gson.toJson(snapPolygonList);
+                String dragPolygonStartJsonStr = "\"dragPolys\":";
+                String snapPolygonStartJsonStr = "\"snapPolys\":";
+                String polygonStartJsonStr = "\"updatePolygons\":true";
+                polygonStr = polygonStartJsonStr + ", " + dragPolygonStartJsonStr + dragPolygonJsonStr
+                        + ", " + snapPolygonStartJsonStr + snapPolygonJsonStr;
                 miceJsonStr = updateMice();
                 break;
             case TRIGGER_MOUSE_MOVE:
