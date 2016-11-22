@@ -46,11 +46,13 @@ function updateBoard(jsonStrFromJava) {
         }
         //alert("x: " + data.activePoint.x + ", y:" + data.activePoint.y);
         displayResult(data.mice[0].activePoint.x, data.mice[0].activePoint.y);
-        var radius = 5;
+        //displayResult(data.mapRectWidth, data.mapRectHeight);
         context.beginPath();
-        context.arc(data.mice[0].activePoint.x, data.mice[0].activePoint.y, radius, 0, 2 * Math.PI, false);
-        //context.arc(300, 100, radius, 0, 2 * Math.PI, false);
-        context.fillStyle = 'green';
+        var cheeseNode = data.mice[0].path[0];
+        var cheeseX = (cheeseNode.iCol + 1) * data.mapRectWidth;
+        var cheeseY = (cheeseNode.iRow + 1) * data.mapRectHeight;
+        context.rect(cheeseX, cheeseY, data.mapRectWidth, data.mapRectHeight);
+        context.fillStyle = 'yellow';
         context.fill();
         context.lineWidth = 3;
         context.strokeStyle = '#003300';

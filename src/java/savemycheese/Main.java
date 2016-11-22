@@ -26,6 +26,7 @@ public class Main extends HttpServlet {
 
     String polygonStr = UNDEFINED_STR;
     String miceJsonStr = UNDEFINED_STR;
+    String map2DJsonStr = UNDEFINED_STR;
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -47,6 +48,7 @@ public class Main extends HttpServlet {
         System.out.println("trigger: " + trigger);
         String miceJsonStartStr = "\"mice\":";
         String jsonToJavaScriptStr;
+        map2DJsonStr = "\"mapRectWidth\":" + Map2D.getRectWidth() + ", \"mapRectHeight\":" + Map2D.getRectHeight();
         switch (trigger) {
             case TRIGGER_INIT:
                 init();
@@ -59,6 +61,7 @@ public class Main extends HttpServlet {
                 polygonStr = polygonStartJsonStr + ", " + dragPolygonStartJsonStr + dragPolygonJsonStr
                         + ", " + snapPolygonStartJsonStr + snapPolygonJsonStr;
                 miceJsonStr = updateMice();
+                System.out.println("map2DJsonStr:" + map2DJsonStr);
                 break;
             case TRIGGER_MOUSE_MOVE:
                 System.out.println("JAVA: mouse move");
@@ -78,7 +81,7 @@ public class Main extends HttpServlet {
                 break;
         }
 
-        jsonToJavaScriptStr = "{" + polygonStr + ", " + miceJsonStartStr + miceJsonStr + "}";
+        jsonToJavaScriptStr = "{" + polygonStr + ", " + miceJsonStartStr + miceJsonStr + ", " + map2DJsonStr + "}";
         //Send data to JavaScript
         //System.out.println("jsonToJavaScript: " + jsonToJavaScriptStr);
         try {
