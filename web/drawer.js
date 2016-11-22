@@ -33,6 +33,9 @@ function updateBoard(jsonStrFromJava) {
         alert("Error in json string: " + jsonStrFromJava);
     }
     if (typeof data !== "undefined") {
+        if (data.isGameOver) {
+            reset();
+        }
         if (data.updatePolygons === true) {
             document.getElementById("coords").innerHTML = "x0Poly0: " + data.dragPolys[0].xpoints[0];
             //draw dragged polygons:                
@@ -60,7 +63,6 @@ function updateBoard(jsonStrFromJava) {
         for (var iMouse = 0; iMouse < data.mice.length; iMouse++) {
             var mouseImg = new Image();
             mouseImg.src = "Mouse.png";
-            //mouseImg.src = "/WEB-INF/classes/resources/images/Level1.png";
             mouseImg.x = data.mice[iMouse].activePoint.x;
             mouseImg.y = data.mice[iMouse].activePoint.y;
             mouseImg.onload = function () {

@@ -27,6 +27,7 @@ public class Main extends HttpServlet {
     String polygonStr = UNDEFINED_STR;
     String miceJsonStr = UNDEFINED_STR;
     String map2DJsonStr = UNDEFINED_STR;
+    String isGameOverJsonStr = UNDEFINED_STR;
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -49,6 +50,8 @@ public class Main extends HttpServlet {
         String miceJsonStartStr = "\"mice\":";
         String jsonToJavaScriptStr;
         map2DJsonStr = "\"mapRectWidth\":" + Map2D.getRectWidth() + ", \"mapRectHeight\":" + Map2D.getRectHeight();
+        isGameOverJsonStr = "\"isGameOver\":" + GameController.isGameOver();
+        System.out.println(isGameOverJsonStr);
         switch (trigger) {
             case TRIGGER_INIT:
                 init();
@@ -81,7 +84,8 @@ public class Main extends HttpServlet {
                 break;
         }
 
-        jsonToJavaScriptStr = "{" + polygonStr + ", " + miceJsonStartStr + miceJsonStr + ", " + map2DJsonStr + "}";
+        jsonToJavaScriptStr = "{" + polygonStr + ", " + miceJsonStartStr + miceJsonStr + ", " + map2DJsonStr + 
+                ", " + isGameOverJsonStr + "}";
         //Send data to JavaScript
         //System.out.println("jsonToJavaScript: " + jsonToJavaScriptStr);
         try {
