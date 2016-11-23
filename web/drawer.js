@@ -1,4 +1,5 @@
 var myInterval;
+var initialized = false;
 var mouseDown = false;
 var TRIGGER_INIT = 0;
 var TRIGGER_MOUSE_MOVE = 10;
@@ -94,14 +95,16 @@ function onMouseUp(e) {
 }
 
 function onMouseMove(e) {
-    var bounds = e.target.getBoundingClientRect();
-    var jsonToJava = {
-        trigger: TRIGGER_MOUSE_MOVE,
-        mouseDown: mouseDown,
-        mouseX: e.clientX - bounds.left,
-        mouseY: e.clientY - bounds.top
-    };
-    communicateWithJava(jsonToJava);
+    if (initialized) {
+        var bounds = e.target.getBoundingClientRect();
+        var jsonToJava = {
+            trigger: TRIGGER_MOUSE_MOVE,
+            mouseDown: mouseDown,
+            mouseX: e.clientX - bounds.left,
+            mouseY: e.clientY - bounds.top
+        };
+        communicateWithJava(jsonToJava);
+    }
 }
 
 function communicateWithJava(jsonToJava) {
@@ -117,6 +120,9 @@ function communicateWithJava(jsonToJava) {
 }
 
 function timeTick() {
+    if (!initialized) {
+        initialize();
+    }
     var jsonToJava = {
         trigger: trigger,
         mouseDown: false,
@@ -127,10 +133,14 @@ function timeTick() {
     trigger = TRIGGER_TIME_TICK;
 }
 
-function reset() {
-    clearInterval(myInterval);
+function initialize() {
     mouseDown = false;
     trigger = TRIGGER_INIT;
+    initialized = true;
     document.getElementById("coords").innerHTML = "---";
 }
 
+function reset() {
+    clearInterval(myInterval);
+    initialize();
+}
