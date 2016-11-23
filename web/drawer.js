@@ -33,11 +33,16 @@ function updateBoard(jsonStrFromJava) {
         alert("Error in json string: " + jsonStrFromJava);
     }
     if (typeof data !== "undefined") {
+        displayResult(data.mice[0].activePoint.x, data.mice[0].activePoint.y);
         if (data.isGameOver || data.isAllPuzzlePiecesPlaced) {
             reset();
+            if (data.isAllPuzzlePiecesPlaced) {
+                document.getElementById("coords").innerHTML = "PASS";
+            } else {
+                document.getElementById("coords").innerHTML = "FAIL";
+            }
         }
         if (data.updatePolygons === true) {
-            document.getElementById("coords").innerHTML = "x0Poly0: " + data.dragPolys[0].xpoints[0];
             //draw dragged polygons:                
             for (var iPoly = 0; iPoly < data.dragPolys.length; iPoly++) {
                 drawPolygon(context, data.dragPolys[iPoly].xpoints, data.dragPolys[iPoly].ypoints, 'rgba(255, 0, 0, 0.5)');
@@ -47,9 +52,6 @@ function updateBoard(jsonStrFromJava) {
                 drawPolygon(context, data.snapPolys[iPoly].xpoints, data.snapPolys[iPoly].ypoints, NO_FILL);
             }
         }
-        //alert("x: " + data.activePoint.x + ", y:" + data.activePoint.y);
-        displayResult(data.mice[0].activePoint.x, data.mice[0].activePoint.y);
-        //displayResult(data.mapRectWidth, data.mapRectHeight);
         context.beginPath();
         var cheeseNode = data.mice[0].path[0];
         var cheeseX = (cheeseNode.iCol + 1) * data.mapRectWidth;
