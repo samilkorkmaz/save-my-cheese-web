@@ -77,7 +77,7 @@ function updateBoard(jsonStrFromJava) {
 }
 
 function display(str) {
-    document.getElementById("coords").innerHTML = str;
+    document.getElementById("level").innerHTML = str;
 }
 
 function clearCanvas() {
@@ -138,7 +138,7 @@ function initialize() {
     mouseDown = false;
     trigger = TRIGGER_INIT;
     initialized = true;
-    document.getElementById("coords").innerHTML = "---";
+    display("---");
 }
 
 function reset() {
