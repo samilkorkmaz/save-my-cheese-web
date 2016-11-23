@@ -138,7 +138,9 @@ public class GameController {
     }
 
     public static void incLevel() {
-        level++;
+        if (isNotLastLevel()) {
+            level++;
+        }
     }
 
     public static String getPolygonFileForCurrentLevel() {

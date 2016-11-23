@@ -34,13 +34,14 @@ function updateBoard(jsonStrFromJava) {
         alert("Error in json string: " + jsonStrFromJava);
     }
     if (typeof data !== "undefined") {
-        displayResult(data.mice[0].activePoint.x, data.mice[0].activePoint.y);
+        var levelStr = "Level: " + data.level;
+        display(levelStr);
         if (data.isGameOver || data.isAllPuzzlePiecesPlaced) {
             reset();
             if (data.isAllPuzzlePiecesPlaced) {
-                document.getElementById("coords").innerHTML = "PASS";
+                display(levelStr + ", PASS");
             } else {
-                document.getElementById("coords").innerHTML = "FAIL";
+                display(levelStr + ", FAIL");
             }
         }
         if (data.updatePolygons === true) {
@@ -75,8 +76,8 @@ function updateBoard(jsonStrFromJava) {
     }
 }
 
-function displayResult(x, y) {
-    document.getElementById("coords").innerHTML = "x: " + x + ", y: " + y;
+function display(str) {
+    document.getElementById("coords").innerHTML = str;
 }
 
 function clearCanvas() {

@@ -29,6 +29,7 @@ public class Main extends HttpServlet {
     String map2DJsonStr = UNDEFINED_STR;
     String isGameOverJsonStr = UNDEFINED_STR;
     String isAllPuzzlePiecesPlacedJsonStr = UNDEFINED_STR;
+    String levelJsonStr = UNDEFINED_STR;
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -84,11 +85,12 @@ public class Main extends HttpServlet {
         map2DJsonStr = "\"mapRectWidth\":" + Map2D.getRectWidth() + ", \"mapRectHeight\":" + Map2D.getRectHeight();
         isGameOverJsonStr = "\"isGameOver\":" + GameController.isGameOver();
         isAllPuzzlePiecesPlacedJsonStr = "\"isAllPuzzlePiecesPlaced\":" + GameController.isAllPuzzlePiecesPlaced();
+        levelJsonStr = "\"level\":" + GameController.getLevel();
         System.out.println(isGameOverJsonStr);
         System.out.println(isAllPuzzlePiecesPlacedJsonStr);
 
         jsonToJavaScriptStr = "{" + polygonStr + ", " + miceJsonStartStr + miceJsonStr + ", " + map2DJsonStr
-                + ", " + isGameOverJsonStr + "," + isAllPuzzlePiecesPlacedJsonStr + "}";
+                + ", " + isGameOverJsonStr + "," + isAllPuzzlePiecesPlacedJsonStr + "," + levelJsonStr + "}";
         //Send data to JavaScript
         //System.out.println("jsonToJavaScript: " + jsonToJavaScriptStr);
         try {
@@ -142,6 +144,9 @@ public class Main extends HttpServlet {
         System.out.println("INIT");
         Map2D.createMap(800, 600);
         GameController.reset();
+        if (GameController.isAllPuzzlePiecesPlaced()) {
+            GameController.incLevel();
+        }
         GameController.start();
     }
 
