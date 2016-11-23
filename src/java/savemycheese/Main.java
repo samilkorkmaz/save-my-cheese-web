@@ -28,6 +28,7 @@ public class Main extends HttpServlet {
     String miceJsonStr = UNDEFINED_STR;
     String map2DJsonStr = UNDEFINED_STR;
     String isGameOverJsonStr = UNDEFINED_STR;
+    String isAllPuzzlePiecesPlacedJsonStr = UNDEFINED_STR;
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -51,7 +52,7 @@ public class Main extends HttpServlet {
         String jsonToJavaScriptStr;
         map2DJsonStr = "\"mapRectWidth\":" + Map2D.getRectWidth() + ", \"mapRectHeight\":" + Map2D.getRectHeight();
         isGameOverJsonStr = "\"isGameOver\":" + GameController.isGameOver();
-        System.out.println(isGameOverJsonStr);
+        isAllPuzzlePiecesPlacedJsonStr = "\"isAllPuzzlePiecesPlaced\":" + GameController.isAllPuzzlePiecesPlaced();
         switch (trigger) {
             case TRIGGER_INIT:
                 init();
@@ -85,7 +86,7 @@ public class Main extends HttpServlet {
         }
 
         jsonToJavaScriptStr = "{" + polygonStr + ", " + miceJsonStartStr + miceJsonStr + ", " + map2DJsonStr + 
-                ", " + isGameOverJsonStr + "}";
+                ", " + isGameOverJsonStr + "," + isAllPuzzlePiecesPlacedJsonStr + "}";
         //Send data to JavaScript
         //System.out.println("jsonToJavaScript: " + jsonToJavaScriptStr);
         try {

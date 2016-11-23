@@ -33,7 +33,7 @@ function updateBoard(jsonStrFromJava) {
         alert("Error in json string: " + jsonStrFromJava);
     }
     if (typeof data !== "undefined") {
-        if (data.isGameOver) {
+        if (data.isGameOver || data.isAllPuzzlePiecesPlaced) {
             reset();
         }
         if (data.updatePolygons === true) {
