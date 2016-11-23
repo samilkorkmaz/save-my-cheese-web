@@ -50,9 +50,6 @@ public class Main extends HttpServlet {
         System.out.println("trigger: " + trigger);
         String miceJsonStartStr = "\"mice\":";
         String jsonToJavaScriptStr;
-        map2DJsonStr = "\"mapRectWidth\":" + Map2D.getRectWidth() + ", \"mapRectHeight\":" + Map2D.getRectHeight();
-        isGameOverJsonStr = "\"isGameOver\":" + GameController.isGameOver();
-        isAllPuzzlePiecesPlacedJsonStr = "\"isAllPuzzlePiecesPlaced\":" + GameController.isAllPuzzlePiecesPlaced();
         switch (trigger) {
             case TRIGGER_INIT:
                 init();
@@ -84,9 +81,14 @@ public class Main extends HttpServlet {
                 System.out.println("ERROR: Unknown trigger " + trigger);
                 break;
         }
+        map2DJsonStr = "\"mapRectWidth\":" + Map2D.getRectWidth() + ", \"mapRectHeight\":" + Map2D.getRectHeight();
+        isGameOverJsonStr = "\"isGameOver\":" + GameController.isGameOver();
+        isAllPuzzlePiecesPlacedJsonStr = "\"isAllPuzzlePiecesPlaced\":" + GameController.isAllPuzzlePiecesPlaced();
+        System.out.println(isGameOverJsonStr);
+        System.out.println(isAllPuzzlePiecesPlacedJsonStr);
 
-        jsonToJavaScriptStr = "{" + polygonStr + ", " + miceJsonStartStr + miceJsonStr + ", " + map2DJsonStr + 
-                ", " + isGameOverJsonStr + "," + isAllPuzzlePiecesPlacedJsonStr + "}";
+        jsonToJavaScriptStr = "{" + polygonStr + ", " + miceJsonStartStr + miceJsonStr + ", " + map2DJsonStr
+                + ", " + isGameOverJsonStr + "," + isAllPuzzlePiecesPlacedJsonStr + "}";
         //Send data to JavaScript
         //System.out.println("jsonToJavaScript: " + jsonToJavaScriptStr);
         try {
