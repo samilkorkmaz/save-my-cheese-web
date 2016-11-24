@@ -30,7 +30,7 @@ public class MyMouse {
     private Node currentNode;
     private Node nextNode;
     private static final double DOUBLE_TOLERANCE = 1e-15;
-    private boolean keepRunning = true;    
+    private boolean keepRunning = true;
     private List<Node> path; //starts from endNode and ends at startNode
 
     private int iActiveRow = 0;
@@ -51,6 +51,7 @@ public class MyMouse {
 
     /**
      * Image source: http://free.clipartof.com/details/57-Free-Cartoon-Gray-Field-Mouse-Clipart-Illustration
+     * @return 
      */
     public static Image getMouseImage() {
         if (mouseImage == null) {
@@ -66,7 +67,8 @@ public class MyMouse {
     /**
      * Make provided image transparent wherever color matches the provided color.<br/>
      *
-     * Reference: http://www.javaworld.com/article/2074105/core-java/making-white-image-backgrounds-transparent-with-java-2d-groovy.html
+     * Reference:
+     * http://www.javaworld.com/article/2074105/core-java/making-white-image-backgrounds-transparent-with-java-2d-groovy.html
      *
      * @param im BufferedImage whose color will be made transparent.
      * @param color Color in provided image which will be made transparent.
@@ -175,12 +177,27 @@ public class MyMouse {
         return Math.abs(d2 - d1) <= DOUBLE_TOLERANCE;
     }
 
+    public boolean hasReachedCheese() {
+        int currentNodeX = currentNode.getColIndex() * Map2D.getRectWidth();
+        int currentNodeY = currentNode.getRowIndex() * Map2D.getRectHeight();
+        int cheeseX = GameController.CHEESE_ICOL * Map2D.getRectWidth();
+        int cheeseY = GameController.CHEESE_IROW * Map2D.getRectHeight();
+        double distanceToCheese = Math.hypot(currentNodeX-cheeseX, currentNodeY-cheeseY);
+        System.out.printf("rectWidth: %d, rectHeight: %d, distanceToCheese: %1.0f", Map2D.getRectWidth(), 
+                Map2D.getRectHeight(), distanceToCheese);
+        return distanceToCheese <= 2.1*Math.max(Map2D.getRectWidth(), Map2D.getRectHeight());
+    }
+
     public void moveAlongPathToCheese() {
         iPath--;
-        if (iPath <= 1) {
+        if (iPath <= 1) { //There is no path left. Can have two reasons: 1.Cheese is reached 2.There is no path to the cheese, i.e. all cells surrounding the mouse are walls (happens when a puzzle piece is dropped on top of a mouse).
             if (!GameController.isAllPuzzlePiecesPlaced()) {
-                //mouse reached cheese, game over
-                GameController.onMouseReachedCheese();
+                if (hasReachedCheese()) {
+                    //mouse reached cheese, game over
+                    GameController.onMouseReachedCheese();
+                } else {
+                    //No path to cheese. Do nothing, stay where you are
+                }
             }
         } else {
             setActivePoint(currentNode.getRowIndex(), currentNode.getColIndex());
@@ -208,19 +225,17 @@ public class MyMouse {
                 } else {
                     dRotation_rad = 2 * Math.PI - dRotationTemp_rad;
                 }
+            } else if (dRotationTemp_rad < -Math.PI) {
+                dRotation_rad = 2 * Math.PI + dRotationTemp_rad;
             } else {
-                if (dRotationTemp_rad < -Math.PI) {
-                    dRotation_rad = 2 * Math.PI + dRotationTemp_rad;
-                } else {
-                    dRotation_rad = dRotationTemp_rad;
-                }
+                dRotation_rad = dRotationTemp_rad;
             }
             double rotationInc_rad = dRotation_rad / nDivisions;
 
             for (int iDiv = 0; iDiv < nDivisions; iDiv++) {
                 //linear interpolation of mouse rotation and position between two nodes
                 imageRotation_rad = prevImageRotation_rad + iDiv * rotationInc_rad;
-                setActivePointXY(currentNodeX + iDiv * dx, currentNodeY + iDiv * dy);                
+                setActivePointXY(currentNodeX + iDiv * dx, currentNodeY + iDiv * dy);
             }
             currentNode = nextNode;
             nextNode = path.get(iPath - 1);
