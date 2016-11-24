@@ -1,5 +1,6 @@
 var myInterval;
 var initialized = false;
+var playButtonPressed = false;
 var mouseDown = false;
 var TRIGGER_INIT = 0;
 var TRIGGER_MOUSE_MOVE = 10;
@@ -67,8 +68,7 @@ function drawPolygons(context, data) {
     }
 }
 
-
-function drawCheese(context, data) {
+function drawMice(context, data) {
     for (var iMouse = 0; iMouse < data.mice.length; iMouse++) {
         var mouseImg = new Image();
         mouseImg.src = "Mouse.png";
@@ -159,5 +159,13 @@ function initialize() {
 
 function reset() {
     clearInterval(myInterval);
+    playButtonPressed = false;
     initialize();
+}
+
+function startTimer() {
+    if (!playButtonPressed) { //to prevent consecutive play button presses to spawn new timers
+        myInterval = setInterval(timeTick, 1500);
+    }
+    playButtonPressed = true;
 }
