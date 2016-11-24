@@ -128,8 +128,7 @@ public class Main extends HttpServlet {
     private String getMiceState() {
         String jsonToJavaScriptStr;
         if (GameController.getMyMouseList().isEmpty()) {
-            System.out.println("Mouse list empty!");
-            jsonToJavaScriptStr = "{activePoint\":{\"x\":0,\"y\":0}}";
+            throw new RuntimeException("Mouse list empty!");
         } else {
             List myMouseList = GameController.getMyMouseList();
             Gson gson = new Gson();
