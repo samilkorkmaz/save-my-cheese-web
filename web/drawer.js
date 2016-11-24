@@ -34,46 +34,62 @@ function updateBoard(jsonStrFromJava) {
         alert("Error in json string: " + jsonStrFromJava);
     }
     if (typeof data !== "undefined") {
-        var levelStr = "Level: " + data.level;
-        display(levelStr);
-        if (data.isGameOver || data.isAllPuzzlePiecesPlaced) {
-            reset();
-            if (data.isAllPuzzlePiecesPlaced) {
-                display(levelStr + ", PASS");
-            } else {
-                display(levelStr + ", FAIL");
-            }
-        }
-        if (data.updatePolygons === true) {
-            //draw dragged polygons:                
-            for (var iPoly = 0; iPoly < data.dragPolys.length; iPoly++) {
-                drawPolygon(context, data.dragPolys[iPoly].xpoints, data.dragPolys[iPoly].ypoints, 'rgba(255, 0, 0, 0.5)');
-            }
-            //draw snap polygons:
-            for (var iPoly = 0; iPoly < data.snapPolys.length; iPoly++) {
-                drawPolygon(context, data.snapPolys[iPoly].xpoints, data.snapPolys[iPoly].ypoints, NO_FILL);
-            }
-        }
-        context.beginPath();
-        var cheeseNode = data.mice[0].path[0];
-        var cheeseX = (cheeseNode.iCol + 1) * data.mapRectWidth;
-        var cheeseY = (cheeseNode.iRow + 1) * data.mapRectHeight;
-        context.rect(cheeseX, cheeseY, data.mapRectWidth, data.mapRectHeight);
-        context.fillStyle = 'yellow';
-        context.fill();
-        context.lineWidth = 3;
-        context.strokeStyle = '#003300';
-        context.stroke();
-        for (var iMouse = 0; iMouse < data.mice.length; iMouse++) {
-            var mouseImg = new Image();
-            mouseImg.src = "Mouse.png";
-            mouseImg.x = data.mice[iMouse].activePoint.x;
-            mouseImg.y = data.mice[iMouse].activePoint.y;
-            mouseImg.onload = function () {
-                context.drawImage(this, this.x, this.y);
-            };
+        checkEndConditions(data);
+        drawPolygons(context, data);
+        drawCheese(context, data);
+        drawMice(context, data);
+    }
+}
+
+function checkEndConditions(data) {
+    var levelStr = "Level: " + data.level;
+    display(levelStr);
+    if (data.isGameOver || data.isAllPuzzlePiecesPlaced) {
+        reset();
+        if (data.isAllPuzzlePiecesPlaced) {
+            display(levelStr + ", PASS");
+        } else {
+            display(levelStr + ", FAIL");
         }
     }
+}
+
+function drawPolygons(context, data) {
+    if (data.updatePolygons === true) {
+        //draw dragged polygons:                
+        for (var iPoly = 0; iPoly < data.dragPolys.length; iPoly++) {
+            drawPolygon(context, data.dragPolys[iPoly].xpoints, data.dragPolys[iPoly].ypoints, 'rgba(255, 0, 0, 0.5)');
+        }
+        //draw snap polygons:
+        for (var iPoly = 0; iPoly < data.snapPolys.length; iPoly++) {
+            drawPolygon(context, data.snapPolys[iPoly].xpoints, data.snapPolys[iPoly].ypoints, NO_FILL);
+        }
+    }
+}
+
+
+function drawCheese(context, data) {
+    for (var iMouse = 0; iMouse < data.mice.length; iMouse++) {
+        var mouseImg = new Image();
+        mouseImg.src = "Mouse.png";
+        mouseImg.x = data.mice[iMouse].activePoint.x;
+        mouseImg.y = data.mice[iMouse].activePoint.y;
+        mouseImg.onload = function () {
+            context.drawImage(this, this.x, this.y);
+        };
+    }
+}
+function drawCheese(context, data) {
+    context.beginPath();
+    var cheeseNode = data.mice[0].path[0];
+    var cheeseX = (cheeseNode.iCol + 1) * data.mapRectWidth;
+    var cheeseY = (cheeseNode.iRow + 1) * data.mapRectHeight;
+    context.rect(cheeseX, cheeseY, data.mapRectWidth, data.mapRectHeight);
+    context.fillStyle = 'yellow';
+    context.fill();
+    context.lineWidth = 3;
+    context.strokeStyle = '#003300';
+    context.stroke();
 }
 
 function display(str) {
