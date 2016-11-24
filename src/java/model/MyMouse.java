@@ -177,7 +177,7 @@ public class MyMouse {
         return Math.abs(d2 - d1) <= DOUBLE_TOLERANCE;
     }
 
-    public boolean hasReachedCheese() {
+    private boolean hasReachedCheese() {
         int currentNodeX = currentNode.getColIndex() * Map2D.getRectWidth();
         int currentNodeY = currentNode.getRowIndex() * Map2D.getRectHeight();
         int cheeseX = GameController.CHEESE_ICOL * Map2D.getRectWidth();
