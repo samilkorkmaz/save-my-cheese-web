@@ -16,7 +16,6 @@ import model.Map2D;
 import model.MyMouse;
 import model.MyPolygon;
 import view.CanvasPanel;
-import view.GameView;
 import view.WelcomeView;
 
 /**
